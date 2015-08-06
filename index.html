@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joe's Notes</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!--ul>
+      <li><a href="vegas_data_display.html">VEGAS Data Display</a></li>
+    </ul-->
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h2>Joe's Notes</h2>
+        <p>NRAO project notes and related thoughts.</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <h2><i>Projects</i></h2>
+      <div class="row">
+        <div class="col-md-4">
+          <h3>VEGAS Data Display</h3>
+          <p>Web application to display VEGAS spectra during an observation.</p>
+          <p>
+	    <a class="btn btn-sm btn-primary" href="./vegas_data_display/vegas_data_display.html" role="button">Details &raquo;</a>
+            <a class="btn btn-sm btn-default" href="http://www.github.com/jmasters/vegasrtdd-server" role="button">Code &raquo;</a>
+	    <a class="btn btn-sm btn-warning" href="http://vegasdisplay-beta.gb.nrao.edu" role="button">App (GB-only) &raquo;</a>
+	  </p>
+        </div>
+        <div class="col-md-4">
+          <h3>Mapping Pipeline</h3>
+          <p>Calibration and imaging pipeline for GBT spectral line mapping observations.</p>
+          <p>
+	    <a class="btn btn-sm btn-default" href="http://www.github.com/jmasters/gbt-pipeline" role="button">Code &raquo;</a>
+	    <a class="btn btn-sm btn-info" href="http://safe.nrao.edu/wiki/bin/view/GB/Gbtpipeline/PipelineRelease" role="button">Wiki &raquo;</a>
+	  </p>
+       </div>
+        <div class="col-md-4">
+          <h3>Spectral Pipeline</h3>
+          <p>Quick-look data reduction pipeline for single pointing GBT spectroscopy observations.</p>
+          <p>
+	    <a class="btn btn-sm btn-primary" href="./spectral_pipeline/spectral_pipeline.html" role="button">Details &raquo;</a>
+	    <a class="btn btn-sm btn-default" href="http://www.github.com/jmasters/gbt-pipeline/tree/master/src/spectralpipe" role="button">Code &raquo;</a>
+	  </p>	    
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <h3>Spectra Query Tool</h3>
+          <p>Web application to query GBT spectra.</p>
+	  <p>
+	    <a class="btn btn-sm btn-default" href="http://www.github.com/jmasters/specquery" role="button">Code &raquo;</a>
+	    <a class="btn btn-sm btn-warning" href="./specquery" role="button">App &raquo;</a>
+	  </p>
+        </div>
+        <div class="col-md-4">
+          <h3>VO GBT Spectra</h3>
+          <p>Exposing GBT spectra to Virtual Observatory services.</p>
+	  <p>
+	    <a class="btn btn-sm btn-primary" href="./vo_gbt_spectra/vo_gbt_spectra.html" role="button">Details &raquo;</a>
+	    <a class="btn btn-sm btn-default" href="http://www.github.com/jmasters/gbt-vo" role="button">Code &raquo;</a>
+	    <a class="btn btn-sm btn-warning" href="http://www.nrao.edu/~bkent/computing/gbtspectra/webservice.html" role="button">App &raquo;</a>
+	  </p>
+        </div>
+      </div>
+
+      <hr>
+
+      <h2><i>Experiments</i></h2>
+      <div class="row">
+        <div class="col-md-4">
+          <h3>GBT pointing</h3>
+          <p>See where the GBT is pointing using Google Earth.  This code has been shelved, but come talk to me if you are interested in hearing more.</p>
+        </div>
+        <div class="col-md-4">
+          <h3>Pulsar App</h3>
+          <p>Mobile application for learning about pulsars.</p>
+        </div>
+      </div>
+
+      <hr>
+
+      <h2><i>Papers and proposals</i></h2>
+      <div class="row">
+        <div class="col-md-4">
+          <h3>AstroHDF</h3>
+          <p>In 2011 I led a proposal to request funding from the NSF to develop a HDF5-based astronomical imaging data format.  It wasn't funded, but I learned a lot in the process.</p>
+        </div>
+      </div>
+      <hr>
+
+      <h2><i>Useful links</i></h2>
+      <div class="row">
+        <div class="col-md-4">
+	  <p><a href="https://dss.gb.nrao.edu/schedule/">GBT Schedule</a></p>
+	  <p><a href="http://dss.gb.nrao.edu/receivers">GBT Receiver Schedule</a></p>
+	  <p><a href="http://gbrescal.gb.nrao.edu/opslogs/opslogs.dbw">Operator Logs</a></p>
+	  <p><a href="http://www.gb.nrao.edu/internal/obscom/history/summary.html">Observer Comments</a></p>
+	  <p><a href="https://safe.nrao.edu/wiki/bin/view/Main/SdfitsDetails">SDFITS details</a></p>
+	  <p><a href="http://www.gb.nrao.edu/vegas/modes/">VEGAS Modes</a></p>
+	  <p><a href="https://safe.nrao.edu/wiki/bin/view/GB/Gbtpipeline/PipelineRelease">GBT Pipeline Release</a></p>
+	</div>
+        <div class="col-md-4">
+	  <p><a href="http://www.gb.nrao.edu/pubcomputing/data-reduction.shtml">GBT Machines</a></p>
+	  <p><a href="http://www.gb.nrao.edu/gbtprops/acceptedproposals.shtml">GBT Projects 2001-2007</a></p>
+	  <p><a href="https://staff.nrao.edu/ccs/doc/phonelookup.shtml">Staff directory</a></p>
+	  <p><a href="http://library.nrao.edu/proposals/?f%5Btelescope%5D%5B%5D=GBT">GBT Project Proposals</a></p>
+	  <p><a href="http://www.gb.nrao.edu/guppi/">GUPPI Real-time display</a></p>
+	  <p><a href="http://www.cv.nrao.edu/~bkent/computing/gbtspectra/index.html">VO GBT Spectra</a></p>
+	  <p><a href=""></a></p>
+	</div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>Last Updated: October 20, 2014</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

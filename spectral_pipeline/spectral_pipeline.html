@@ -1,0 +1,329 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>GBT Spectral Pipeline</title>
+
+</head>
+<body>
+<p><a href="http://www.cv.nrao.edu/~jmasters">Back to Joe's Notes</a></p>
+
+<h1>GBT Spectral Pipeline</h1>
+
+<ul>
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#uses">Uses</a></li>
+<li><a href="#design">Design</a></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#running">Running</a></li>
+<li><a href="#tbd">Open issues</a></li>
+<li><a href="#other">Other</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+
+
+<h2><span id="purpose">Purpose</span></h2>
+
+<h3>Problem</h3>
+
+<p>There is no quick and easy way to find out what has been observed by the GBT.  It is even harder to find "reduced" spectra.</p>
+
+<h3>Solution</h3>
+
+<p>Create a "quick-look" pipeline to calibrate GBT spectral line pointing (i.e. not mapping) observations, produce a summary image and place it in a query-able archive.</p>
+
+<h2><span id="uses">Typical Uses</span></h2>
+
+<p>This pipeline is not meant to be run by outside users.  It's purpose is to populate archives that can be queried for pipeline data products.  We expect these archive queries will reflect questions like the following:</p>
+
+<ul>
+<li>Has source X been observed by the GBT?
+
+<ul>
+<li>What does the quick look calibrated spectrum look like?</li>
+<li>When was it observed?</li>
+<li>What was the system temperature?</li>
+</ul>
+</li>
+<li>What sources were observed by user Y?</li>
+<li>What sources were part of project Z?</li>
+</ul>
+
+
+<h2><span id="design">Design</span></h2>
+
+<p>The goal of the GBT Spectral Pipeline is to generate a quick-look data reduction pipeline for GBT spectroscopy data that is capable of processing at least 80% of all sessions observed with the GBT in "Standard Observing Modes".</p>
+
+<p>This is meant to provide the community with easy access to GBT data, including data from projects that they were not involved with.</p>
+
+<h3>Black box view</h3>
+
+<p>At the highest level, the pipeline accepts and produces the following:</p>
+
+<ul>
+<li><strong>Inputs</strong>:
+
+<ol>
+<li> Uncalibrated "raw" SDFITS spectra</li>
+</ol>
+</li>
+<li><strong>Outputs</strong>:
+
+<ol>
+<li> Calibrated, averaged, RFI-cleaned, baseline-fit "quick-look" SDFITS spectrum for each target in the input file</li>
+<li> Image showing the spectrum and "useful" metadata</li>
+</ol>
+</li>
+</ul>
+
+
+<p><img src="./spectrum.png" alt="Output spectrum" /></p>
+
+<h3>Summary</h3>
+
+<p>The quick-look pipeline operates with minimal user intervention.  The pipeline determines the observing mode used for spectroscopic data, calibrates and averages data for each target in the session, fits a spectral baseline, and writes the reduced data into an sdfits file.  Where appropriate, the pipeline attempts to identify and flag RFI.  In cases where complex baselines or extensive RFI are major issues, the observer will always do better to process the data by hand.</p>
+
+<p>The pipeline generates a set of statistics and in some cases it will provide nominal scientific parameters (for example, fitting extragalactic HI profiles).  It generates a summary image with metadata about the spectrum for each target observed in the session.</p>
+
+<p>The product of this pipeline (i.e. reduced spectra) is provided to the astronomical community through the query-able web interfaces.</p>
+
+<h3>Constraints</h3>
+
+<h2><span id="implementation">Implementation</span></h2>
+
+<p>The Spectral Pipeline is written mostly in GBTIDL<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.  The first approach was to use Python but it quickly became apparent that a lot of the required functionality already existed in GBTIDL, so reusing that code was a better approach.</p>
+
+<p>The IDL code does the calibration.  When a calibrated SDFITS file is produced, a python script generates a png plot of the spectrum and some metadata by extracting it from the FITS file.  The IDL code also produces a "data" file containing the velocity axis of the spectrum.  That is interpreted by the python code and used to create the plot with a velocity axis included.</p>
+
+<h3>Dependencies</h3>
+
+<p>The code requires GBTIDL and the following python libraries:</p>
+
+<ul>
+<li>numpy</li>
+<li>fitsio</li>
+<li>pylab</li>
+</ul>
+
+
+<h2><span id="installation">Installation Instructions</span></h2>
+
+<p>NB: GBTIDL is assumed to already be available.</p>
+
+<p>Create a virtual environment for the python portion of the pipeline:</p>
+
+<pre><code>ssh pipeline@colossus
+virtualenv /home/gbt7/pipeline/spectral-env
+source /home/gbt7/pipeline/spectral-env/bin/activate
+pip install fitsio
+pip install matplotlib
+pip install numpy
+deactivate
+</code></pre>
+
+<p>If installing to the release area, run:</p>
+
+<pre><code>/users/pipeline/update-release-version.sh
+</code></pre>
+
+<p>If installing to the test area, run:</p>
+
+<pre><code>/users/pipeline/update-test-version.sh
+</code></pre>
+
+<p>If installing into a development area, cd to a directory where you want to install and check out the repository:</p>
+
+<pre><code>git clone https://github.com/jmasters/gbt-pipeline.git
+</code></pre>
+
+<h2><span id="running">How to run</span></h2>
+
+<p>Make sure the spectral pipe directory is in the path seen by GBTIDL.  I do this by creating a symlink in my home directory called gbtidlpro.  For example:</p>
+
+<pre><code>ln -s /home/gbtpipeline/release/spectralpipe ~/gbtidlpro
+</code></pre>
+
+<p>Then, start gbtidl and run the pipeline:</p>
+
+<pre><code>gbtidl
+GBTIDL -&gt; spectralpipe, 'foo.fits'
+</code></pre>
+
+<p>This will produce a calibrated SDFITS spectrum and a png image for each target in the input file, in the current directory.</p>
+
+<h2><span id="tbd">Open issues</span></h2>
+
+<p>At the moment, the pipeline can process:</p>
+
+<ul>
+<li>extragalactic HI, and</li>
+<li>H2O maser observations</li>
+</ul>
+
+
+<p>The goal is to support more types of observations.  It is also a goal to continually improve the calibration even though the products are intended to be "quick-look" only.</p>
+
+<h2><span id="other">Other useful things to know about</span></h2>
+
+<h2><span id="references">References</span></h2>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p><a href="http://gbtidl.nrao.edu">http://gbtidl.nrao.edu</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+</body>
+</html>

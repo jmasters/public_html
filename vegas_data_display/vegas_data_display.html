@@ -1,0 +1,376 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>VEGAS Data Display</title>
+
+</head>
+<body>
+<p><a href="http://www.cv.nrao.edu/~jmasters">Back to Joe's Notes</a></p>
+
+<h1>VEGAS Data Display</h1>
+
+<ul>
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#uses">Uses</a></li>
+<li><a href="#design">Design</a></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#running">Running</a></li>
+<li><a href="#tbd">Open issues</a></li>
+<li><a href="#other">Other</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+
+
+<h2><span id="purpose">Purpose</span></h2>
+
+<h3>Problem</h3>
+
+<p>Observers and operators do not have a way to quickly and easily view the data quality of their spectra during an observation.  Problems can manifest themselves in unpredictable ways, so it is useful to look at the data from different perspectives.  We already have the GBT FITS Monitor (GFM) Astrid spectral line plugin, but it's not well-suited for VEGAS.</p>
+
+<h3>Solution</h3>
+
+<p>Create a real time spectral display.</p>
+
+<p>The VEGAS Data Display project exists to:</p>
+
+<ol>
+<li>fill the functionality gaps that exist in GFM regarding VEGAS data,</li>
+<li>be a prototype client for a GB "streaming" system, and</li>
+<li>be a prototype web-based observing tool.</li>
+</ol>
+
+
+<h2>Where GFM falls short</h2>
+
+<ul>
+<li>The spectral line mode is much too slow to display data for VEGAS. GFM waits until data is ready on disk.  This is not until the end of a scan and the delay can be significant.</li>
+<li>Given the number of display options provided by VEGAS, GFM's layout feels crowded.  There are also concerns about limited display colors and unhandled exceptions if the number of plots requested exceed internal limits.</li>
+<li>GFM does not provide a 3d view of the data that includes a time history over many spectral channels.  That is the purpose of a waterfall plot in the proposed display.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+</ul>
+
+
+<h2><span id="uses">Typical Uses</span></h2>
+
+<p>Most users will likely view their data at a very high level to:</p>
+
+<ul>
+<li>check the frequency settings of their scans,</li>
+<li>look for problems across the band(s), and</li>
+<li>identify any time varying issues with the data.</li>
+</ul>
+
+
+<h2><span id="design">Design</span></h2>
+
+<h3>System</h3>
+
+<p>As previously stated, one of the reasons for this project was to use the newly developed "streaming" infrastructure for the GBT.  Members of the GB software group determined that this is best achieved using the ZeroMQ (ZMQ) library.  Another purpose was to be a prototype web app, with an eye toward possibly developing or migrating other observer tools as browser-based applications.  These project goals guided the design choices.</p>
+
+<p>We use websockets so the server can push new data as it is observed to the client.</p>
+
+<h3>Server</h3>
+
+<p>So, the high level design is that a "display server" connects to one or more Managers to read a ZMQ stream, averages the data to reduce the size and push it to the browser client through a websocket connection.  The client code allows some interactivity for data selection/filtering.  Those display options are communicated to the server, which responds with new data pushed to the client.</p>
+
+<h3>Client</h3>
+
+<p>The client display includes both a 2d waterfall plot and a series of 1d plots.  There is a spectrum plot below the waterfall plot and a time series plot to the side, both reflecting the current crosshair position on the waterfall plot for the row and column, respectively.</p>
+
+<p><img src="./waterfall.png" alt="Waterfall" />
+<img src="./spectra.png" alt="Spectra" /></p>
+
+<h3>Constraints</h3>
+
+<p>Moving large amounts of data to a client's browser is computationally prohibitive.  Without averaging, it is not possible to efficiently display many thousands of spectral channels of data on a screen with far fewer pixels.</p>
+
+<p>Any change in the type of data displayed requires coordinated communication with a data server.</p>
+
+<h2><span id="implementation">Implementation</span></h2>
+
+<p>The display server is implemented in python using the Tornado framework, both because it is Python (a familiar language) and because it supports websockets.  The server reads ZMQ streams from GB M&amp;C managers, reduces the volume of data and pushes it to a web client.</p>
+
+<p>The web client is written in javascript, making use of the jQuery, jQueury-UI and highcharts libraries.  The client primarily for passive display, but also allows choices about what data is to be displayed.</p>
+
+<h3>Dependencies</h3>
+
+<p>The display server depends on the M&amp;C environment to provide streams from the VEGAS managers (one for each bank) and the LO/IF system to provide frequencies information via FITS files.  Those FITS files are assumed to be in the <strong>/home/gbtdata/{project}/</strong> directory where {project} is the project identifier for the current scan.</p>
+
+<h2><span id="installation">Installation Instructions</span></h2>
+
+<p>NB: These instructions should apply to any machine in GB, but have only been tested on "colossus".</p>
+
+<ul>
+<li><p>Get display source code</p>
+
+<pre><code>DISPLAY_DIR=/home/sandboxes/${USER}/display
+mkdir -p ${DISPLAY_DIR}
+cd ${DISPLAY_DIR}
+git clone https://github.com/jmasters/vegasrtdd-server
+git clone https://github.com/jmasters/vegasrtdd-ui
+</code></pre></li>
+<li><p>Install tornado</p>
+
+<pre><code>source /home/gbt7/newt/McPython.bash
+mkdir -p ~/.virtualenvs
+virtualenv ~/.virtualenvs/display
+source /users/jmasters/.virtualenvs/display/bin/activate
+pip install tornado
+</code></pre></li>
+<li><p>Install test environment (optional)</p>
+
+<p>  Build the M&amp;C repository following the instructions below.  NB: It's fine to skip the mkTelescopeDirs step.  That is only needed for installation.</p>
+
+<p>  <a href="https://safe.nrao.edu/wiki/bin/view/GB/Software/DevelopingMC">https://safe.nrao.edu/wiki/bin/view/GB/Software/DevelopingMC</a></p>
+
+<ul>
+<li><p>Build the protobufs</p>
+
+<pre><code>cd ${DISPLAY_DIR}/vegasrtdd-server/
+cp /home/sandboxes/${USER}/mc/ygor/libraries/DataPublisher/IDL/*.proto
+cp /home/sandboxes/${USER}/mc/gbt/devices/backends/vegas/DataPublisher/IDL/*.proto
+/home/gbt1/RH664/bin/protoc -I. -I/home/gbt1/RH664/include/ --python_out=. *.proto
+</code></pre></li>
+</ul>
+</li>
+</ul>
+
+
+<h2><span id="running">Running the display</span></h2>
+
+<h3>Live mode</h3>
+
+<ul>
+<li><p>Run the display server (in a new terminal)</p>
+
+<pre><code>DISPLAY_DIR=/home/sandboxes/${USER}/display
+source /home/gbt/gbt.bash
+source /home/gbt7/newt/McPython.bash
+source /users/${USER}/.virtualenvs/vegasrtdd/bin/activate
+cd ${DISPLAY_DIR}/vegasrtdd-server/
+python display_server.py
+</code></pre></li>
+<li><p>Launch a client</p>
+
+<p>  Open a browser and go to <a href="http://colossus.gb.nrao.edu:7777">http://colossus.gb.nrao.edu:7777</a></p></li>
+</ul>
+
+
+<h3>Development mode</h3>
+
+<p>Note that this assumes you have your own M&amp;C build.  To build M&amp;C, follow the instructions in the "Install test environment" section <a href="#installation">above</a>.</p>
+
+<ul>
+<li><p>Stream from a file (in a new terminal)</p>
+
+<pre><code>source /home/sim/gbt.bash
+cd /home/sandboxes/${USER}/mc/gbt/devices/backends/vegas/SimPublisher
+./x86_64-linux/simVegasStreamer /lustre/gbtdata/TGBT13B_502_43/VEGAS A
+</code></pre></li>
+<li><p>Display Server</p>
+
+<p>  In a new terminal, open server_config.py and set</p>
+
+<pre><code>LIVETEST = False
+</code></pre>
+
+<p>  Then, start a server</p>
+
+<pre><code>DISPLAY_DIR=/home/sandboxes/${USER}/display
+source /home/gbt/gbt.bash
+source /home/gbt7/newt/McPython.bash
+source /users/${USER}/.virtualenvs/display/bin/activate
+cd ${DISPLAY_DIR}/vegasrtdd-server/```
+</code></pre></li>
+<li><p>To launch a client:</p>
+
+<p>  Open a browser and go to <a href="http://colossus.gb.nrao.edu:7777">http://colossus.gb.nrao.edu:7777</a></p></li>
+</ul>
+
+
+<h2><span id="tbd">Open issues</span></h2>
+
+<ul>
+<li>encoding changed: need to fix using python array module.  see ray's email.</li>
+<li>only shows total power data</li>
+<li>assumes bank A is active</li>
+<li>does not blank "buttons" for inactive banks</li>
+<li>waterfall is limited to one bank at a time</li>
+<li>no "freeze" option</li>
+<li>no zooming or panning</li>
+<li>sluggish</li>
+</ul>
+
+
+<h2><span id="other">Other useful things to know about</span></h2>
+
+<ul>
+<li><strong>list_all_services.py</strong> will report what streams are running and their URLs</li>
+<li><strong>list_keys.py</strong> will report the keys that are available for a stream</li>
+<li>The <strong>CLEO vegas data monitor</strong> is really useful to see the state and configuration of each of the banks</li>
+<li><strong>vegasdm</strong> is another monitoring tool displaying different types of data</li>
+</ul>
+
+
+<h2><span id="references">References</span></h2>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p><a href="http://www.gb.nrao.edu/vegas/report/realtimedisp.pdf">http://www.gb.nrao.edu/vegas/report/realtimedisp.pdf</a> (<em>NB: this is a proposal, not a formal specification</em>)  <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+</body>
+</html>

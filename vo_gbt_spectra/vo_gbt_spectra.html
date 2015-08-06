@@ -1,0 +1,305 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>VO GBT Spectra</title>
+
+</head>
+<body>
+<p><a href="http://www.cv.nrao.edu/~jmasters">Back to Joe's Notes</a></p>
+
+<h1>VO GBT Spectra</h1>
+
+<ul>
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#uses">Uses</a></li>
+<li><a href="#design">Design</a></li>
+<li><a href="#implementation">Implementation</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#running">Running</a></li>
+<li><a href="#tbd">Open issues</a></li>
+<li><a href="#other">Other</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+
+
+<h2><span id="purpose">Purpose</span></h2>
+
+<h3>Problem</h3>
+
+<p>GBT spectra are not directly available to VO services.</p>
+
+<h3>Solution</h3>
+
+<p>Create an archive of GBT spectral data products and a server to process SSAP queries from VO client tools.</p>
+
+<h2><span id="uses">Typical Uses</span></h2>
+
+<h2><span id="design">Design</span></h2>
+
+<h3>Constraints</h3>
+
+<p>This service will not provide a comprehensive view of GBT spectra.  Instead, it will cover a curated subset of observations.  To keep the implementation process simple and predictable, we will not use the DAL Server or other VO frameworks.</p>
+
+<h2><span id="implementation">Implementation</span></h2>
+
+<h3>Timeline</h3>
+
+<ol>
+<li><p>Identify spectra that could be published (e.g. survey data form various GB scientists)</p>
+
+<p> <strong>We will use Jim Braatz's GBT H2O maser data.  He is OK with this and the data is familiar from the spectral pipeline project.</strong></p>
+
+<p>Timeline:  ~2 weeks  [First week of May]</p>
+
+<p>Effort:  2 days</p></li>
+<li><p>Identify clients that could already query GBT spectra via SSAP requests.
+In other words, if we register our GBT spectra with the VO directory service, the data become exposed to queries without any additional effort.</p>
+
+<p>Timeline:  ~2 weeks  [mid-May]</p>
+
+<p>Effort:  1 day</p></li>
+<li><p>If clients do not exist, we need to develop our own.  This could be a simple web based query form.</p>
+
+<p> <strong>We implemented a cone search query service by running a simply web.py python server that handles http GET requests and responds with a very basic VO table.  What we really want is a SSAP service, but this was a good proof of concept and potentially useful on its own.
+ The code is here: <a href="https://github.com/jmasters/gbt-vo.git">https://github.com/jmasters/gbt-vo.git</a></strong></p>
+
+<p> <strong>We identified the Datascope as a client to query for GBT spectra.  If it is a maintained tool, our products should eventually show up in its results.</strong></p>
+
+<p>Timeline:  1 week  [Start of June]</p>
+
+<p>Effort:   1 week</p></li>
+<li><p>Place spectra and metadata in a "database", directory, etc.</p>
+
+<p> <strong>We have a script (make_vo_lite_sqlite_db.py) that puts the spectra and metadata in a sqlite database (gbt_spectra.sqlite).</strong></p>
+
+<p>Timeline:  2 weeks [3rd week of June]</p>
+
+<p>Effort:  2 weeks</p></li>
+<li><p>Provide VOTable responses to SSAP HTML GET requests</p>
+
+<p> <strong>We need to add a timestamp for each spectrum to the database.  DATE-OBS?  SSAP requires: POS (ICRS), SIZE, BAND, TIME, FORMAT"</strong></p>
+
+<p>Timeline:  3 weeks  [2nd week of July]</p>
+
+<p>Effort: 3 weeks</p></li>
+<li><p>Talk to systems / security group at NRAO to make sure security and data availability are optimal.</p>
+
+<p>Timeline:  1 week  [3rd week of July]</p>
+
+<p>Effort:  TBD</p></li>
+<li><p>Testing of requests and responses</p>
+
+<p>Timeline:  1 week [4th week of July]</p>
+
+<p>Effort:  3 days</p></li>
+<li><p>Register the data with the VO directory service</p>
+
+<p>Timeline:  1 day</p>
+
+<p>Effort:  1 day</p></li>
+</ol>
+
+
+<p><strong>Total effort:</strong>  7-8 weeks</p>
+
+<p><strong>Total time:</strong>  12 weeks</p>
+
+<h3>Dependencies</h3>
+
+<h2><span id="installation">Installation Instructions</span></h2>
+
+<p>Check out the code</p>
+
+<pre><code>git clone https://github.com/jmasters/gbt-vo.git
+cd gbt-vo/
+</code></pre>
+
+<p>Create a link called "spectra", which points to a directory containing calibrated single spectrum SDFITS files.</p>
+
+<pre><code>ln -s &lt;target-directory&gt; spectra
+</code></pre>
+
+<p>If the database (gbt_spectra.sqlite) does not exist, create it</p>
+
+<pre><code>python make_vo_lite_sqlite_db.py
+</code></pre>
+
+<h2><span id="running">How to run</span></h2>
+
+<p>Start the server</p>
+
+<pre><code>python cone_search_server.py 8888 &amp;
+</code></pre>
+
+<p>Open a browser and query the server.  For example</p>
+
+<pre><code>http://beefy.cv.nrao.edu:8888?ra=6&amp;dec=45&amp;sr=10
+</code></pre>
+
+<h2><span id="tbd">Open issues</span></h2>
+
+<p>It isn't easy to determine which VO specification is "the latest".  Google searches and various VO web sites reveal different versions to be the most up to date.  What is the definitive source?</p>
+
+<h2><span id="other">Other useful things to know about</span></h2>
+
+<h2><span id="references">References</span></h2>
+
+<ul>
+<li>SSAP Spec: <a href="http://www.ivoa.net/documents/latest/SSA.html">http://www.ivoa.net/documents/latest/SSA.html</a></li>
+<li>Cone Search Spec: <a href="http://www.ivoa.net/documents/latest/ConeSearch.html">http://www.ivoa.net/documents/latest/ConeSearch.html</a></li>
+<li>Datascope: <a href="http://heasarc.gsfc.nasa.gov/cgi-bin/vo/datascope/init.pl">http://heasarc.gsfc.nasa.gov/cgi-bin/vo/datascope/init.pl</a></li>
+</ul>
+
+</body>
+</html>
